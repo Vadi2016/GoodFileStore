@@ -1,5 +1,6 @@
 package ru.store.endpoints;
 
+import ru.store.api.endpoint.EndpointApplicationAPI;
 import ru.store.api.system.ApplicationService;
 import ru.store.api.system.SyncService;
 import ru.store.dto.ResultDTO;
@@ -10,7 +11,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 @WebService
-public class EndpointApplication implements ru.store.api.endpoints.EndpointApplication {
+public class EndpointApplication implements EndpointApplicationAPI {
 
     @Inject
     private ApplicationService applicationService;
@@ -21,14 +22,14 @@ public class EndpointApplication implements ru.store.api.endpoints.EndpointAppli
     @Override
     @WebMethod
     public ResultDTO ping() {
-        return new SuccessDTO();
+        return new SuccessDTO(null);
     }
 
     @Override
     @WebMethod
     public ResultDTO shutdown() {
         applicationService.shutdown();
-        return new SuccessDTO();
+        return new SuccessDTO(null);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class EndpointApplication implements ru.store.api.endpoints.EndpointAppli
     @WebMethod
     public ResultDTO sync() {
         syncService.sync();
-        return new SuccessDTO();
+        return new SuccessDTO(true);
     }
 
     @Override
