@@ -20,16 +20,12 @@ public class TimerServiceBean implements TimerService {
 
     private SyncTask task = null;
 
-
-    @Override
     public boolean getActive() {
         return task != null;
     }
 
-    @Override
     public void setActive(boolean active) {
-        if (active) start();
-        else stop();
+        if (active) { start(); } else stop();
     }
 
     @Loggable
@@ -42,6 +38,7 @@ public class TimerServiceBean implements TimerService {
         return true;
     }
 
+    @Loggable
     @Override
     public synchronized boolean stop() {
         if (task == null) return false;
