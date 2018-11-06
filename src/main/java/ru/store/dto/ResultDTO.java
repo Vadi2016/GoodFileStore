@@ -1,24 +1,23 @@
 package ru.store.dto;
 
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class ResultDTO {
 
-    private Object object;
-    private Boolean bool;
+    @Nullable
+    protected Boolean success;
 
+    @Nullable
+    protected String message;
 
-    public ResultDTO()  {
-
-    }
-
-    public ResultDTO(Object obj) {
-        this.object = obj;
-    }
-
-    public Object getObject() {
-        return object;
-    }
-
-    public void setObject(Object object) {
-        this.object = object;
+    public ResultDTO(@Nullable Boolean success) {
+        this.success = success;
     }
 }
