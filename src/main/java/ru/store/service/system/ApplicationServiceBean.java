@@ -25,7 +25,7 @@ public class ApplicationServiceBean implements ApplicationService {
     private TimerService timerService;
 
     @Inject
-    private WeldContainer weldContainer;
+    private WeldContainer container;
 
     private Repository repository = null;
 
@@ -39,31 +39,38 @@ public class ApplicationServiceBean implements ApplicationService {
         if (settingService.getJcrActive()) login();
     }
 
-    @Override
-    public void shutdown() {
-        weldContainer.shutdown();
-        System.exit(0);
-    }
-
     @Loggable
     @Override
     public boolean login() {
         if (status()) return false;
         try {
-            final String jsrUrl = settingService.getJcrUrl();
-            repository = new URLRemoteRepository(jsrUrl);
+            final String jsrURL = settingService.getJcrUrl();
+            repository = new URLRemoteRepository(jsrURL);
             final String jsrLogin = settingService.getJcrLogin();
-            final String jsrPass = settingService.getJcrPassword();
-            final char[] pass = jsrPass.toCharArray();
-            final SimpleCredentials credentials = new SimpleCredentials(jsrLogin, pass);
+            final String jsrPassword = settingService.getJcrPassword();
+            final char[] password = jsrPassword.toCharArray();
+            final SimpleCredentials credentials = new SimpleCredentials(jsrLogin, password);
             session = repository.login(credentials);
             return true;
-        } catch (final MalformedURLException | RepositoryException e) {
+        } catch (final Exception e) {
             error = e;
             return false;
         }
     }
 
+    @Override
+    public boolean status() {
+        return repository != null && session != null;
+    }
+
+    @Nullable
+    @Override
+    public Exception error() {
+        return error;
+    }
+
+    @Loggable
+    @Override
     public boolean logout() {
         if (repository == null) return false;
         if (session == null) return false;
@@ -76,32 +83,27 @@ public class ApplicationServiceBean implements ApplicationService {
             error = e;
             return false;
         }
-
     }
 
     @Override
-    public boolean status() {
-        return repository != null && session != null;
+    public void shutdown() {
+        container.shutdown();
+        System.exit(0);
     }
-
 
     @Nullable
-    @Override
-    public Exception error() {
-        return error;
-    }
-
-    @Loggable
     @Override
     public Repository repository() {
         return repository;
     }
 
+    @Nullable
+    @Override
     public Session session() {
         return session;
     }
 
-    @Loggable
+    @Nullable
     @Override
     @SneakyThrows
     public Node getRootNode() throws RepositoryException {
