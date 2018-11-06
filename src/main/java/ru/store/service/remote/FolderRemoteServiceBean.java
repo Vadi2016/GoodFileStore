@@ -14,13 +14,17 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.jcr.nodetype.NodeType.*;
 
 @ApplicationScoped
 public class FolderRemoteServiceBean implements FolderRemoteService {
 
     @Inject
     private ApplicationService applicationService;
+
+    @Override
+    public void init() {
+
+    }
 
     @Override
     public void printListFolderNameRoot() {
